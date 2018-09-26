@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "786127221485",
+    "firebase_url": "https://liulo-d4137.firebaseio.com",
+    "project_id": "liulo-d4137",
+    "storage_bucket": "liulo-d4137.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786127221485:android:43055e2bf6d9c4ad",
+        "android_client_info": {
+          "package_name": "com.dwarvesf.liulo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786127221485-nl8pujm1q1uih18pph61v46mkpc87qrd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dwarvesf.liulo",
+            "certificate_hash": "d1d4b430d32e39c9f7922d949fb2885bbe72ac40"
+          }
+        },
+        {
+          "client_id": "786127221485-jtovu6m2gv739jjjgtlbjf1osbsvdshh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDNatejazN2SIyYYT8hDvd7_J4CT7kNIg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786127221485-jtovu6m2gv739jjjgtlbjf1osbsvdshh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
