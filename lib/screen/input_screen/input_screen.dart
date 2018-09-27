@@ -1,11 +1,13 @@
 import 'dart:async';
-import 'dart:convert' show json;
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import "package:http/http.dart" as http;
+import 'package:liulo/data/auth.dart';
+import 'package:liulo/data/database_helper.dart';
+import 'package:liulo/model/user.dart';
+import 'package:liulo/screen/input_screen/login_presenter.dart';
 import 'package:liulo/screen/user/user_home_screen.dart';
-
+import 'package:liulo/utils/signin_util.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -29,11 +31,20 @@ class InputScreen extends StatefulWidget {
   _InputScreenState createState() => new _InputScreenState();
 }
 
-class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
+class _InputScreenState extends State<InputScreen>
+    implements LoginScreenContract, AuthStateListener {
   GoogleSignInAccount _currentUser;
-  String _contactText;
   bool visibilityView = false;
   bool isFirstTimeOpen = true;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _isLoading = false;
+  LoginPresenter _presenter;
+
+  _InputScreenState() {
+    _presenter = new LoginPresenter(this);
+    var authStateProvider = new AuthStateProvider();
+    authStateProvider.subscribe(this);
+  }
 
   void _changed(bool visibility) {
     setState(() {
@@ -66,31 +77,34 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+    if (_currentUser != null) {
+      visibilityView = false;
+    } else {
+      visibilityView = true;
+    }
+    SignInUtil.googleSignIn.onCurrentUserChanged.listen((
+        GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
       });
-      if (_currentUser != null) {
-        if (isFirstTimeOpen) {
-          _changed(false);
-          isFirstTimeOpen = false;
-        }
-
-        _handleGetContact();
-      } else {
-        _changed(true);
-      }
+      checkCurrentUser();
     });
-    _googleSignIn.signInSilently();
+    SignInUtil.googleSignIn.signInSilently();
   }
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+  void checkCurrentUser() {
+    if (_currentUser != null) {
+      print(_currentUser);
+      if (isFirstTimeOpen) {
+        _changed(false);
+        isFirstTimeOpen = false;
+      }
+
+      _getToken();
+    } else {
+      _changed(true);
+    }
+  }
 
   void login() {
     isFirstTimeOpen = false;
@@ -99,65 +113,31 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
 
   Future<Null> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
+      await SignInUtil.googleSignIn.signIn();
     } catch (error) {
       print(error);
     }
   }
 
   Future<Null> _handleSignOutAndLogin() async {
-    _googleSignIn.disconnect();
+    SignInUtil.googleSignIn.disconnect();
     _handleSignIn();
   }
 
-  Future<Null> _handleGetContact() async {
-    setState(() {
-      _contactText = "Loading contact info...";
-    });
-    final http.Response response = await http.get(
-      'https://people.googleapis.com/v1/people/me/connections'
-          '?requestMask.includeField=person.names',
-      headers: await _currentUser.authHeaders,
-    );
-    if (response.statusCode != 200) {
-      setState(() {
-        _contactText = "People API gave a ${response.statusCode} "
-            "response. Check logs for details.";
-      });
-      print('People API ${response.statusCode} response: ${response.body}');
-      return;
-    }
-    final Map<String, dynamic> data = json.decode(response.body);
-    final String namedContact = _pickFirstNamedContact(data);
-    setState(() {
-      if (namedContact != null) {
-        _contactText = "I see you know $namedContact!";
-        replaceToUserHome();
-        new Future.delayed(const Duration(seconds: 3), () {
-          _changed(true);
-        });
-      } else {
-        _contactText = "No contacts to display.";
-      }
-    });
-  }
+  Future<Null> _getToken() async {
+    final GoogleSignInAuthentication auth = await _currentUser.authentication;
+    if (auth != null) {
+      print(auth);
 
-  String _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic> connections = data['connections'];
-    final Map<String, dynamic> contact = connections?.firstWhere(
-          (dynamic contact) => contact['names'] != null,
-      orElse: () => null,
-    );
-    if (contact != null) {
-      final Map<String, dynamic> name = contact['names'].firstWhere(
-            (dynamic name) => name['displayName'] != null,
-        orElse: () => null,
-      );
-      if (name != null) {
-        return name['displayName'];
-      }
+      replaceToUserHome();
+      new Future.delayed(const Duration(seconds: 3), () {
+        _changed(true);
+      });
+      //_presenter.doLogin(auth.idToken, "google");
+
+    } else {
+      _changed(true);
     }
-    return null;
   }
 
   String results = "";
@@ -168,7 +148,10 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => UserHomeScreen(title: 'User Page')),
+          builder: (context) =>
+              UserHomeScreen(title: 'User Page',
+                  user: new User(
+                      _currentUser.displayName, _currentUser.email, ""))),
     );
   }
 
@@ -176,10 +159,12 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+
     if (visibilityView) {
       return new WillPopScope(
         onWillPop: _onWillPop,
         child: new Scaffold(
+          key: scaffoldKey,
           appBar: new AppBar(
             title: new Text(widget.title),
           ),
@@ -237,5 +222,33 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
         decoration: new BoxDecoration(color: Colors.white),
       );
     }
+  }
+
+  void _showSnackBar(String text) {
+    scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text(text)));
+  }
+
+  @override
+  void onLoginError(String errorTxt) {
+    _showSnackBar(errorTxt);
+    print(errorTxt);
+    setState(() => _isLoading = false);
+  }
+
+  @override
+  void onLoginSuccess(User user) async {
+    print(user);
+    _showSnackBar(user.toString());
+    setState(() => _isLoading = false);
+    var db = new DatabaseHelper();
+    await db.saveUser(user);
+    var authStateProvider = new AuthStateProvider();
+    authStateProvider.notify(AuthState.LOGGED_IN);
+  }
+
+  @override
+  void onAuthStateChanged(AuthState state) {
+    if (state == AuthState.LOGGED_IN) replaceToUserHome();
   }
 }
