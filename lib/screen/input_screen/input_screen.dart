@@ -1,11 +1,15 @@
 import 'dart:async';
-import 'dart:convert' show json;
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import "package:http/http.dart" as http;
+import 'package:liulo/data/auth.dart';
+import 'package:liulo/data/database_helper.dart';
+import 'package:liulo/model/response/login_response.dart';
+import 'package:liulo/model/user.dart';
+import 'package:liulo/screen/input_screen/login_presenter.dart';
 import 'package:liulo/screen/user/user_home_screen.dart';
-
+import 'package:liulo/utils/signin_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -29,11 +33,21 @@ class InputScreen extends StatefulWidget {
   _InputScreenState createState() => new _InputScreenState();
 }
 
-class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
+class _InputScreenState extends State<InputScreen>
+    implements LoginScreenContract, AuthStateListener {
   GoogleSignInAccount _currentUser;
-  String _contactText;
+  User user;
   bool visibilityView = false;
   bool isFirstTimeOpen = true;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _isLoading = false;
+  LoginPresenter _presenter;
+
+  _InputScreenState() {
+    _presenter = new LoginPresenter(this);
+    var authStateProvider = new AuthStateProvider();
+    authStateProvider.subscribe(this);
+  }
 
   void _changed(bool visibility) {
     setState(() {
@@ -66,31 +80,40 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+    if (_currentUser != null) {
+      visibilityView = false;
+    } else {
+      visibilityView = true;
+    }
+    SignInUtil.googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
       });
-      if (_currentUser != null) {
-        if (isFirstTimeOpen) {
-          _changed(false);
-          isFirstTimeOpen = false;
-        }
-
-        _handleGetContact();
-      } else {
-        _changed(true);
-      }
+      checkCurrentUser();
     });
-    _googleSignIn.signInSilently();
+    SignInUtil.googleSignIn.signInSilently();
   }
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+  void checkCurrentUser() {
+    if (_currentUser != null) {
+      print(_currentUser);
+      if (isFirstTimeOpen) {
+        _changed(false);
+        isFirstTimeOpen = false;
+      }
+      _getToken();
+
+    } else {
+      _changed(true);
+    }
+  }
+
+
+  Future<Null> setUserLocal(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+  }
 
   void login() {
     isFirstTimeOpen = false;
@@ -99,65 +122,31 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
 
   Future<Null> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
+      await SignInUtil.googleSignIn.signIn();
     } catch (error) {
       print(error);
     }
   }
 
   Future<Null> _handleSignOutAndLogin() async {
-    _googleSignIn.disconnect();
+    SignInUtil.googleSignIn.disconnect();
     _handleSignIn();
   }
 
-  Future<Null> _handleGetContact() async {
-    setState(() {
-      _contactText = "Loading contact info...";
-    });
-    final http.Response response = await http.get(
-      'https://people.googleapis.com/v1/people/me/connections'
-          '?requestMask.includeField=person.names',
-      headers: await _currentUser.authHeaders,
-    );
-    if (response.statusCode != 200) {
-      setState(() {
-        _contactText = "People API gave a ${response.statusCode} "
-            "response. Check logs for details.";
-      });
-      print('People API ${response.statusCode} response: ${response.body}');
-      return;
-    }
-    final Map<String, dynamic> data = json.decode(response.body);
-    final String namedContact = _pickFirstNamedContact(data);
-    setState(() {
-      if (namedContact != null) {
-        _contactText = "I see you know $namedContact!";
-        replaceToUserHome();
-        new Future.delayed(const Duration(seconds: 3), () {
-          _changed(true);
-        });
-      } else {
-        _contactText = "No contacts to display.";
-      }
-    });
-  }
+  Future<Null> _getToken() async {
+    final GoogleSignInAuthentication auth = await _currentUser.authentication;
+    if (auth != null) {
+      print(auth);
 
-  String _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic> connections = data['connections'];
-    final Map<String, dynamic> contact = connections?.firstWhere(
-          (dynamic contact) => contact['names'] != null,
-      orElse: () => null,
-    );
-    if (contact != null) {
-      final Map<String, dynamic> name = contact['names'].firstWhere(
-            (dynamic name) => name['displayName'] != null,
-        orElse: () => null,
-      );
-      if (name != null) {
-        return name['displayName'];
-      }
+      /*replaceToUserHome();
+      new Future.delayed(const Duration(seconds: 3), () {
+        _changed(true);
+      });*/
+      setState(() => _isLoading = true);
+      _presenter.doLogin(auth.accessToken, "google");
+    } else {
+      _changed(true);
     }
-    return null;
   }
 
   String results = "";
@@ -168,7 +157,11 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => UserHomeScreen(title: 'User Page')),
+          builder: (context) =>
+              UserHomeScreen(
+                  title: 'User Page',
+                  //user: new User("", 1, "", _currentUser.displayName, _currentUser.email))),
+                  user: user)),
     );
   }
 
@@ -180,56 +173,15 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
       return new WillPopScope(
         onWillPop: _onWillPop,
         child: new Scaffold(
+          key: scaffoldKey,
           appBar: new AppBar(
             title: new Text(widget.title),
           ),
-          body: new Center(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Container(
-                    margin: const EdgeInsets.only(
-                        left: 20.0, right: 20.0, bottom: 10.0),
-                    child: new TextField(
-                      decoration:
-                      new InputDecoration(hintText: "Enter text here..."),
-                      onSubmitted: (String str) {
-                        setState(() {
-                          results = results + "\n" + str;
-                          controller.text = "";
-                        });
-                      },
-                      controller: controller,
-                    )),
-                new ButtonTheme(
-                  minWidth: 150.0,
-                  height: 36.0,
-                  child: RaisedButton(
-                    onPressed: join,
-                    textColor: Colors.white,
-                    color: Colors.red,
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Text(
-                      "Join Event",
-                    ),
-                  ),
-                ),
-                new ButtonTheme(
-                  minWidth: 150.0,
-                  height: 36.0,
-                  child: RaisedButton(
-                    onPressed: login,
-                    textColor: Colors.white,
-                    color: Colors.blue,
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Text(
-                      "Login",
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          body:
+          new Stack(
+            children: _buildForm(context),
           ),
+
         ),
       );
     } else {
@@ -237,5 +189,110 @@ class _InputScreenState extends State<InputScreen> with WidgetsBindingObserver {
         decoration: new BoxDecoration(color: Colors.white),
       );
     }
+  }
+
+  List<Widget> _buildForm(BuildContext context) {
+    var center = new Center(
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+              margin: const EdgeInsets.only(
+                  left: 20.0, right: 20.0, bottom: 10.0),
+              child: new TextField(
+                decoration:
+                new InputDecoration(hintText: "Enter text here..."),
+                onSubmitted: (String str) {
+                  setState(() {
+                    results = results + "\n" + str;
+                    controller.text = "";
+                  });
+                },
+                controller: controller,
+              )),
+          new ButtonTheme(
+            minWidth: 150.0,
+            height: 36.0,
+            child: RaisedButton(
+              onPressed: join,
+              textColor: Colors.white,
+              color: Colors.red,
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                "Join Event",
+              ),
+            ),
+          ),
+          new ButtonTheme(
+            minWidth: 150.0,
+            height: 36.0,
+            child: RaisedButton(
+              onPressed: login,
+              textColor: Colors.white,
+              color: Colors.blue,
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                "Login",
+              ),
+            ),
+          ),
+
+        ],
+      ),
+
+    );
+
+    var l = new List<Widget>();
+    l.add(center);
+
+    if (_isLoading) {
+      var modal = new Stack(
+        children: [
+          new Opacity(
+            opacity: 0.3,
+            child: const ModalBarrier(dismissible: false, color: Colors.grey),
+          ),
+          new Center(
+            child: new CircularProgressIndicator(),
+          ),
+        ],
+      );
+      l.add(modal);
+    }
+
+    return l;
+  }
+
+
+  void _showSnackBar(String text) {
+    scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text(text)));
+  }
+
+  @override
+  void onLoginError(String errorTxt) {
+    _showSnackBar(errorTxt);
+    print(errorTxt);
+    setState(() => _isLoading = false);
+  }
+
+  @override
+  void onLoginSuccess(LoginResponse loginReponse) async {
+    print(loginReponse);
+
+    setState(() => _isLoading = false);
+    var db = new DatabaseHelper();
+    this.user = loginReponse.data.user;
+    // await db.saveUser(loginReponse.data.user);
+    await setUserLocal(loginReponse.data.jwt);
+
+    replaceToUserHome();
+/*    var authStateProvider = new AuthStateProvider();
+    authStateProvider.notify(AuthState.LOGGED_IN);*/
+  }
+
+  @override
+  void onAuthStateChanged(AuthState state) {
+    //if (state == AuthState.LOGGED_IN) replaceToUserHome();
   }
 }
