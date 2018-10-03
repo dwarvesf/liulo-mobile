@@ -13,8 +13,8 @@ class NetworkUtil {
 
   final JsonDecoder _decoder = new JsonDecoder();
 
-  Future<dynamic> get(String url) {
-    return http.get(url).then((http.Response response) {
+  Future<dynamic> get(String url, {Map headersGet, body, encoding}) {
+    return http.get(url, headers: headersGet).then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
 
@@ -25,23 +25,10 @@ class NetworkUtil {
     });
   }
 
-  /* Future<dynamic> post(String url, {Map headers, body, encoding}) {
-    return http
-        .post(url, body: body, headers: headers, encoding: encoding)
-        .then((http.Response response) {
-      final String res = response.body;
-      final int statusCode = response.statusCode;
-
-      if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data");
-      }
-      return _decoder.convert(res);
-    });
-  }*/
 
   Future<dynamic> post(String url, {Map headers, body, encoding}) async {
     return await http
-        .post(url, body: body, headers: {"Accept": "application/json"})
+        .post(url, body: body, headers: headers)
         .then((http.Response response) {
       print(response.body);
       final int statusCode = response.statusCode;

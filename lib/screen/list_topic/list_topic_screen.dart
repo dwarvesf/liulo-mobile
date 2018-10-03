@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:liulo/model/event.dart';
 import 'package:liulo/model/topic.dart';
 import 'package:liulo/screen/list_question/list_question_screen.dart';
 import 'package:liulo/screen/list_topic/list_topic_presenter.dart';
 import 'package:liulo/utils/shimmer.dart';
+import 'package:liulo/utils/token_util.dart';
 
 class ListTopicScreen extends StatefulWidget {
-  ListTopicScreen({Key key, this.title}) : super(key: key);
+  ListTopicScreen({Key key, this.title, this.event}) : super(key: key);
 
   final String title;
+  final Event event;
 
   @override
   _ListTopicScreenState createState() => new _ListTopicScreenState();
@@ -35,11 +38,10 @@ class _ListTopicScreenState extends State<ListTopicScreen>
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
 
-    await Future.delayed(Duration(seconds: 2));
-
-    setState(() {
-      listTopicPresenter.fakeData();
-    });
+    var token = await TokenUtil.getToken();
+    if (token.isNotEmpty) {
+      listTopicPresenter.getListTopic(token, widget.event.id);
+    }
 
     return null;
   }
@@ -68,18 +70,17 @@ class _ListTopicScreenState extends State<ListTopicScreen>
         Divider(height: 5.0),
         ListTile(
           title: Text(
-            '${listTopic[position].title}',
+            '${listTopic[position].name}',
             style: TextStyle(
               color: Colors.deepOrangeAccent,
             ),
           ),
           subtitle: Text(
-            '${listTopic[position].body}',
+            '${listTopic[position].description}',
             style: new TextStyle(
               fontStyle: FontStyle.italic,
             ),
           ),
-
           onTap: () => _onTapItem(context, listTopic[position]),
         ),
       ],
@@ -185,5 +186,10 @@ class _ListTopicScreenState extends State<ListTopicScreen>
     setState(() {
       this.listTopic = items;
     });
+  }
+
+  @override
+  void onGetDataFailed(String error) {
+    setLoading(false);
   }
 }

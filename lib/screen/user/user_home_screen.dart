@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:liulo/model/user.dart';
+import 'package:liulo/screen/create_event/create_event_screen.dart';
 import 'package:liulo/screen/list_event/list_event_screen.dart';
 import 'package:liulo/utils/signin_util.dart';
 
@@ -50,6 +51,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       context,
       MaterialPageRoute(
           builder: (context) => ListEventScreen(title: 'Manage Event')),
+    );
+  }
+
+  void replaceToCreateEventScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CreateEventScreen(title: 'Create Event')),
     );
   }
 
@@ -118,7 +127,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 minWidth: 150.0,
                 height: 36.0,
                 child: RaisedButton(
-                  onPressed: subtractNumbers,
+                  onPressed: replaceToCreateEventScreen,
                   textColor: Colors.white,
                   color: Colors.blue,
                   padding: const EdgeInsets.all(8.0),

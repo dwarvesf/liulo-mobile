@@ -2,14 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:liulo/data/auth.dart';
-import 'package:liulo/data/database_helper.dart';
 import 'package:liulo/model/response/login_response.dart';
 import 'package:liulo/model/user.dart';
-import 'package:liulo/screen/input_screen/login_presenter.dart';
+import 'package:liulo/screen/input_screen/input_presenter.dart';
 import 'package:liulo/screen/user/user_home_screen.dart';
 import 'package:liulo/utils/signin_util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:liulo/utils/token_util.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -34,19 +32,17 @@ class InputScreen extends StatefulWidget {
 }
 
 class _InputScreenState extends State<InputScreen>
-    implements LoginScreenContract, AuthStateListener {
+    implements InputScreenContract {
   GoogleSignInAccount _currentUser;
   User user;
   bool visibilityView = false;
   bool isFirstTimeOpen = true;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isLoading = false;
-  LoginPresenter _presenter;
+  InputPresenter _presenter;
 
   _InputScreenState() {
-    _presenter = new LoginPresenter(this);
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.subscribe(this);
+    _presenter = new InputPresenter(this);
   }
 
   void _changed(bool visibility) {
@@ -109,12 +105,6 @@ class _InputScreenState extends State<InputScreen>
     }
   }
 
-
-  Future<Null> setUserLocal(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', token);
-  }
-
   void login() {
     isFirstTimeOpen = false;
     _handleSignOutAndLogin();
@@ -138,10 +128,6 @@ class _InputScreenState extends State<InputScreen>
     if (auth != null) {
       print(auth);
 
-      /*replaceToUserHome();
-      new Future.delayed(const Duration(seconds: 3), () {
-        _changed(true);
-      });*/
       setState(() => _isLoading = true);
       _presenter.doLogin(auth.accessToken, "google");
     } else {
@@ -278,21 +264,14 @@ class _InputScreenState extends State<InputScreen>
 
   @override
   void onLoginSuccess(LoginResponse loginReponse) async {
-    print(loginReponse);
+    print(loginReponse.data.jwt);
 
     setState(() => _isLoading = false);
-    var db = new DatabaseHelper();
     this.user = loginReponse.data.user;
-    // await db.saveUser(loginReponse.data.user);
-    await setUserLocal(loginReponse.data.jwt);
-
+    await TokenUtil.setUserLocal(loginReponse.data.jwt);
     replaceToUserHome();
-/*    var authStateProvider = new AuthStateProvider();
-    authStateProvider.notify(AuthState.LOGGED_IN);*/
-  }
-
-  @override
-  void onAuthStateChanged(AuthState state) {
-    //if (state == AuthState.LOGGED_IN) replaceToUserHome();
+    new Future.delayed(const Duration(seconds: 3), () {
+      _changed(true);
+    });
   }
 }

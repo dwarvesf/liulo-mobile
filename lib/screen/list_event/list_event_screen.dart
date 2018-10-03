@@ -5,6 +5,7 @@ import 'package:liulo/model/event.dart';
 import 'package:liulo/screen/list_event/list_event_presenter.dart';
 import 'package:liulo/screen/list_topic/list_topic_screen.dart';
 import 'package:liulo/utils/shimmer.dart';
+import 'package:liulo/utils/token_util.dart';
 
 class ListEventScreen extends StatefulWidget {
   ListEventScreen({Key key, this.title}) : super(key: key);
@@ -35,11 +36,10 @@ class _ListEventScreenState extends State<ListEventScreen>
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
 
-    await Future.delayed(Duration(seconds: 2));
-
-    setState(() {
-      listEventPresenter.fakeData();
-    });
+    var token = await TokenUtil.getToken();
+    if (token.isNotEmpty) {
+      listEventPresenter.getListEvent(token);
+    }
 
     return null;
   }
@@ -51,14 +51,15 @@ class _ListEventScreenState extends State<ListEventScreen>
   }
 
   void _onTapItem(BuildContext context, Event event) {
-    replaceToListTopicScreen();
+    replaceToListTopicScreen(event);
   }
 
-  void replaceToListTopicScreen() {
+  void replaceToListTopicScreen(Event event) {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ListTopicScreen(title: 'Manage Topic')),
+          builder: (context) =>
+              ListTopicScreen(title: 'Manage Topic', event: event)),
     );
   }
 
@@ -68,13 +69,13 @@ class _ListEventScreenState extends State<ListEventScreen>
         Divider(height: 5.0),
         ListTile(
           title: Text(
-            '${listEvent[position].title}',
+            '${listEvent[position].code} | ${listEvent[position].name}',
             style: TextStyle(
               color: Colors.deepOrangeAccent,
             ),
           ),
           subtitle: Text(
-            '${listEvent[position].body}',
+            '${listEvent[position].description}',
             style: new TextStyle(
               fontStyle: FontStyle.italic,
             ),
@@ -183,5 +184,10 @@ class _ListEventScreenState extends State<ListEventScreen>
     setState(() {
       this.listEvent = items;
     });
+  }
+
+  @override
+  void onGetDataFailed(String error) {
+    setLoading(false);
   }
 }
