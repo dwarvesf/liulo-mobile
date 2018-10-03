@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:liulo/model/user.dart';
+import 'package:liulo/screen/list_event/list_event_screen.dart';
+import 'package:liulo/utils/signin_util.dart';
 
 class UserHomeScreen extends StatefulWidget {
-  UserHomeScreen({Key key, this.title}) : super(key: key);
+  UserHomeScreen({Key key, this.title, this.user}) : super(key: key);
 
   final String title;
-
+  final User user;
   @override
   _UserHomeScreenState createState() => new _UserHomeScreenState();
 }
@@ -38,22 +40,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   String results = "";
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
 
   final TextEditingController controller = new TextEditingController();
 
-  void addNumbers() {}
-
   void subtractNumbers() {}
 
+  void replaceToManageEvent() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ListEventScreen(title: 'Manage Event')),
+    );
+  }
 
   Future<Null> _handleSignOut() async {
-    _googleSignIn.disconnect();
+    SignInUtil.googleSignIn.disconnect();
     Navigator.pop(context);
   }
 
@@ -73,14 +74,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               new Container(
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  'User name: Thanh Nguyen',
+                  'User name:  ${widget.user.fullName}',
                   softWrap: true,
                 ),
               ),
               new Container(
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  'Email: thanhnd@gmail.com',
+                  'Email:  ${widget.user.email}',
                   softWrap: true,
                 ),
               ),
@@ -131,7 +132,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 minWidth: 150.0,
                 height: 36.0,
                 child: RaisedButton(
-                  onPressed: subtractNumbers,
+                  onPressed: replaceToManageEvent,
                   textColor: Colors.white,
                   color: Colors.green,
                   padding: const EdgeInsets.all(8.0),
