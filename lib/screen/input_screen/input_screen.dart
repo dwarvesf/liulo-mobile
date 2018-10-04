@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:liulo/application.dart';
 import 'package:liulo/model/response/login_response.dart';
 import 'package:liulo/model/user.dart';
+import 'package:liulo/routes.dart';
 import 'package:liulo/screen/input_screen/input_presenter.dart';
 import 'package:liulo/screen/user/user_home_screen.dart';
 import 'package:liulo/utils/signin_util.dart';
@@ -12,13 +14,7 @@ import 'package:liulo/utils/token_util.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Líu Lo',
-      theme: new ThemeData(
-        primarySwatch: Colors.orange,
-      ),
-      home: new InputScreen(title: 'Líu Lo Demo'),
-    );
+    return InputScreen(title: 'Líu Lo Demo');
   }
 }
 
@@ -151,7 +147,9 @@ class _InputScreenState extends State<InputScreen>
     );
   }
 
-  void join() {}
+  void join() {
+    Application.router.navigateTo(context, "${Routes.questions}/1");
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:liulo/data/local/file_data_source.dart';
+import 'package:liulo/data/local/file_handler.dart';
 import 'package:liulo/models/question.dart';
 
 /// Note: This class has no direct dependencies on any Flutter dependencies.
@@ -15,7 +16,7 @@ class QuestionLocalDataSource implements FileDataSource<List<Question>> {
 
   @override
   Future<List<Question>> load() async {
-    final file = await _getLocalFile();
+    final file = await FileHandler.getLocalFile(tag, getDirectory);
     final string = await file.readAsString();
     final json = JsonDecoder().convert(string);
     final questions = (json['questions']).map<Question>((question) => Question.fromJson(question)).toList();
@@ -25,7 +26,7 @@ class QuestionLocalDataSource implements FileDataSource<List<Question>> {
 
   @override
   Future save(List<Question> data) async {
-    final file = await _getLocalFile();
+    final file = await FileHandler.getLocalFile(tag, getDirectory);
 
     return file.writeAsString(JsonEncoder().convert({
       'questions': data.map((question) => question.toJson()).toList(),
@@ -34,14 +35,8 @@ class QuestionLocalDataSource implements FileDataSource<List<Question>> {
 
   @override
   Future clear() async {
-    final file = await _getLocalFile();
+    final file = await FileHandler.getLocalFile(tag, getDirectory);
 
     return file.delete();
-  }
-
-  Future<File> _getLocalFile() async {
-    final dir = await getDirectory();
-
-    return File('${dir.path}/file_storage__$tag.json');
   }
 }

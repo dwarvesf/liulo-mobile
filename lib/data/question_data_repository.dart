@@ -43,4 +43,9 @@ class QuestionDataRepository implements QuestionRepository {
   Future<Question> update(Question question) {
     return _remoteDS.update(question);
   }
+
+  @override
+  Future upVote(int questionId) {
+    return _remoteDS.upVote(questionId);
+  }
 }

@@ -11,7 +11,7 @@ final questionsReducer = combineReducers<List<Question>>([
 ]);
 
 List<Question> _add(List<Question> state, AddQuestionAction action) {
-  return List.from(state)..add(action.question);
+  return List.from(state)..add(action.question)..sort();
 }
 
 List<Question> _addMany(List<Question> state, AddQuestionsAction action) {
@@ -20,7 +20,7 @@ List<Question> _addMany(List<Question> state, AddQuestionsAction action) {
     var updatedQuestion = action.questions.firstWhere((newQuestion) => question == newQuestion, orElse: null);
     return updatedQuestion != null ? updatedQuestion : question;
   }).toList()
-    ..addAll(newQuestions);
+    ..addAll(newQuestions)..sort();
 }
 
 List<Question> _update(List<Question> state, UpdateQuestionAction action) {
@@ -32,5 +32,5 @@ List<Question> _delete(List<Question> state, DeleteQuestionAction action) {
 }
 
 List<Question> _replaceAll(List<Question> state, ReplaceQuestionsAction action) {
-  return action.questions;
+  return action.questions..sort();
 }

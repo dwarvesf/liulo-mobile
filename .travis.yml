@@ -69,9 +69,13 @@ matrix:
       - export PATH=$GRADLE_HOME/bin:$PATH
       - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
       script:
-      - ./flutter/bin/flutter test
       - ./flutter/bin/flutter build apk --release
-      # - 'cd android && fastlane beta CRASHLYTICS_TOKEN:$CRASHLYTICS_TOKEN CRASHLYTICS_SECRET:$CRASHLYTICS_SECRET CRASHLYTICS_EMAILS:$CRASHLYTICS_EMAILS SLACK_CHANNEL:$SLACK_CHANNEL SLACK_URL:$SLACK_URL'
+      - 'if [ $TRAVIS_BRANCH =~ "release/.*" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
+          cd android && fastlane beta CRASHLYTICS_TOKEN:$CRASHLYTICS_TOKEN CRASHLYTICS_SECRET:$CRASHLYTICS_SECRET CRASHLYTICS_EMAILS:$CRASHLYTICS_EMAILS SLACK_CHANNEL:$SLACK_CHANNEL SLACK_URL:$SLACK_URL;
+        fi'
+      - 'if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
+          cd android && fastlane deploy CRASHLYTICS_TOKEN:$CRASHLYTICS_TOKEN CRASHLYTICS_SECRET:$CRASHLYTICS_SECRET CRASHLYTICS_EMAILS:$CRASHLYTICS_EMAILS SLACK_CHANNEL:$SLACK_CHANNEL SLACK_URL:$SLACK_URL;
+        fi'
 
     # Builds an IPA.
     - env: JOB=IPA
@@ -94,7 +98,6 @@ matrix:
       - brew install ios-deploy
       - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
       script:
-      - ./flutter/bin/flutter test
       - ./flutter/bin/flutter build ios --release --no-codesign
 
 # blocklist

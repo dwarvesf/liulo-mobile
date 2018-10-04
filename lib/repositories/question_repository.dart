@@ -12,4 +12,6 @@ abstract class QuestionRepository {
   Future<Question> create(Question question);
 
   Future<Question> update(Question question);
+
+  Future upVote(int questionId);
 }

@@ -2,7 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:liulo/application.dart';
-import 'package:liulo/middlewares/store.dart';
+import 'package:liulo/middlewares/index.dart';
 import 'package:liulo/reducers/index.dart';
 import 'package:liulo/routes.dart';
 import 'package:redux/redux.dart';
@@ -25,7 +25,7 @@ class App extends StatelessWidget {
     final store = Store<AppState>(
       appReducer,
       initialState: AppState.initialState(),
-      middleware: createStoreMiddleware(),
+      middleware: createStoreMiddleware(Application.questionRepository),
     );
     Application.store = store;
   }

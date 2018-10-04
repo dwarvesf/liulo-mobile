@@ -52,11 +52,6 @@ class AppState {
 
   @override
   int get hashCode => appLoading.hashCode ^ user.hashCode ^ loadings.hashCode ^ questions.hashCode;
-
-  @override
-  String toString() {
-    return 'AppState{appLoading: $appLoading, user: $user, loadings: $loadings, questions: $questions}';
-  }
 }
 
 // We create the State reducer by combining many smaller reducers into one!

@@ -1,12 +1,9 @@
+import 'dart:async';
+
+import 'package:liulo/application.dart';
 import 'package:liulo/models/question.dart';
-
-class InitQuestionsAction {}
-
-class LoadQuestionsByTopicAction {
-  final int topicId;
-
-  LoadQuestionsByTopicAction(this.topicId);
-}
+import 'package:liulo/reducers/index.dart';
+import 'package:redux/redux.dart';
 
 class AddQuestionAction {
   final Question question;
@@ -38,8 +35,79 @@ class ReplaceQuestionsAction {
   ReplaceQuestionsAction(this.questions);
 }
 
-class UpVoteQuestionAction {
-  final int id;
+class LoadQuestionsByTopicAction {
+  final int topicId;
 
-  UpVoteQuestionAction(this.id);
+  LoadQuestionsByTopicAction(this.topicId);
+
+  call() => (Store<AppState> store) async {
+        try {
+          var questions = await Application.questionRepository.getByTopic(topicId);
+          store.dispatch(ReplaceQuestionsAction(questions));
+          return questions;
+        } catch (e) {
+          print("LoadQuestionsByTopicAction: error: ${e.toString()}");
+          return [];
+        }
+      };
+}
+
+class UpVoteQuestionAction {
+  final int questionId;
+
+  UpVoteQuestionAction(this.questionId);
+
+  call() => (Store<AppState> store) async {
+        Question question = store.state.questions.firstWhere((question) => question.id == questionId, orElse: null);
+        if (question == null) return Future.error(NullThrownError());
+        try {
+          await Application.questionRepository.upVote(questionId);
+          question.voteCount += 1;
+          question.isVoted = true;
+          store.dispatch(UpdateQuestionAction(question));
+          return question;
+        } catch (e) {
+          print("UpVoteQuestionAction: error: ${e.toString()}");
+          return Future.error(e);
+        }
+      };
+}
+
+class UnVoteQuestionAction {
+  final int questionId;
+
+  UnVoteQuestionAction(this.questionId);
+
+  call() => (Store<AppState> store) async {
+    Question question = store.state.questions.firstWhere((question) => question.id == questionId, orElse: null);
+    if (question == null) return Future.error(NullThrownError());
+    try {
+      await Application.questionRepository.upVote(questionId);
+      question.voteCount -= 1;
+      question.isVoted = false;
+      store.dispatch(UpdateQuestionAction(question));
+      return question;
+    } catch (e) {
+      print("UnVoteQuestionAction: error: ${e.toString()}");
+      return Future.error(e);
+    }
+  };
+}
+
+class CreateQuestionAction {
+  final Question question;
+
+  CreateQuestionAction(this.question);
+
+  call() => (Store<AppState> store) async {
+        if (question == null) return Future.error(NullThrownError());
+        try {
+          var createdQuestion = await Application.questionRepository.create(question);
+          store.dispatch(AddQuestionAction(createdQuestion));
+          return createdQuestion;
+        } catch (e) {
+          print("CreateQuestionAction: error: ${e.toString()}");
+          return Future.error(e);
+        }
+      };
 }

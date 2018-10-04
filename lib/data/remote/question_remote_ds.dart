@@ -5,7 +5,7 @@ import 'package:liulo/models/question.dart';
 class QuestionRemoteDataSource {
   final Duration delay;
 
-  const QuestionRemoteDataSource({this.delay = const Duration(milliseconds: 2000)});
+  const QuestionRemoteDataSource({this.delay = const Duration(seconds: 1)});
 
   /// Mock that fetches data from an API after a short delay
   Future<List<Question>> getByTopic(int topicId) async {
@@ -44,11 +44,24 @@ class QuestionRemoteDataSource {
 
   /// Mock that will "Always Succeed"
   Future<Question> create(Question question) async {
-    return Future.value(question);
+    return Future.delayed(delay, () {
+      question.id = DateTime.now().millisecondsSinceEpoch;
+      question.status = QuestionStatus.ACTIVE;
+      return question;
+    });
   }
 
   /// Mock that will "Always Succeed"
   Future<Question> update(Question question) async {
-    return Future.value(question);
+    return Future.delayed(delay, () {
+      return question;
+    });
+  }
+
+  /// Mock that will "Always Succeed"
+  Future upVote(int questionId) async {
+    return Future.delayed(delay, () {
+      return null;
+    });
   }
 }

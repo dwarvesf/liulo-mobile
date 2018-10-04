@@ -5,17 +5,15 @@ export 'user.dart';
 
 import 'dart:async';
 
-import 'package:liulo/application.dart';
+import 'package:liulo/actions/app_loading.dart';
+import 'package:liulo/reducers/index.dart';
+import 'package:redux/redux.dart';
+
+class LoadPersistentDataAction {}
 
 class RehydrateAction {
-  RehydrateAction() {
-    Future.wait([
-      
-    ]);
-  }
-
-  @override
-  String toString() {
-    return 'RehydrateAction{}';
-  }
+  call() => (Store<AppState> store) async {
+    store.dispatch(LoadPersistentDataAction());
+    await Future.delayed(Duration(seconds: 1), () => store.dispatch(SetAppLoadedAction()));
+  };
 }

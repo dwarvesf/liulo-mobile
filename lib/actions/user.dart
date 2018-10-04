@@ -6,6 +6,4 @@ class SetUserAction {
   SetUserAction(this.user);
 }
 
-class ClearUserAction {
-  ClearUserAction();
-}
+class ClearUserAction {}

@@ -1,3 +1,1 @@
-class SetAppLoadedAction {
-  SetAppLoadedAction();
-}
+class SetAppLoadedAction {}

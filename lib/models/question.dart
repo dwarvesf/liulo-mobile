@@ -10,7 +10,7 @@ class QuestionStatus extends Enum<int> {
   static const QuestionStatus DELETED = const QuestionStatus(3);
 }
 
-class Question {
+class Question implements Comparable<Question> {
   int id;
   String description;
   int voteCount;
@@ -18,18 +18,29 @@ class Question {
   int topicId;
   int ownerId;
   bool isAnonymous;
+  bool isVoted;
 
-  Question({this.id, this.description, this.voteCount, this.status, this.topicId, this.ownerId, this.isAnonymous});
+  Question({
+    this.id = 0,
+    this.description = "",
+    this.voteCount = 0,
+    this.status = QuestionStatus.ACTIVE,
+    this.topicId = 0,
+    this.ownerId = 0,
+    this.isAnonymous = true,
+    this.isVoted = false,
+  });
 
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
       id: json['id'],
       description: json['description'],
       voteCount: json['vote_count'],
-      status: json['status'],
+      status: QuestionStatus(json['status']),
       topicId: json['topic_id'],
       ownerId: json['owner_id'],
       isAnonymous: json['is_anonymous'],
+      isVoted: json['is_voted'],
     );
   }
 
@@ -42,6 +53,7 @@ class Question {
       "topic_id": topicId,
       "owner_id": ownerId,
       "is_anonymous": isAnonymous,
+      "is_voted": isVoted,
     };
   }
 
@@ -57,4 +69,10 @@ class Question {
   String toString() {
     return 'Question{description: $description}';
   }
+
+  @override
+  int compareTo(Question other) {
+    return -this.id.compareTo(other.id);
+  }
+
 }

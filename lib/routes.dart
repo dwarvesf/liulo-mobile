@@ -14,6 +14,6 @@ class Routes {
 
     router.define(root, handler: rootHandler);
 
-    router.define(questions, handler: questionHandler);
+    router.define("$questions/:topicId", handler: questionHandler);
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -11,10 +9,7 @@ import 'views/question_list/index.dart';
 
 var rootHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return StoreBuilder<AppState>(
-    onInit: (store) {
-      store.dispatch(LoadQuestionsByTopicAction(0));
-      Future.delayed(Duration(seconds: 2), () => store.dispatch(SetAppLoadedAction()));
-    },
+    onInit: (store) => store.dispatch(RehydrateAction()()),
     builder: (context, store) {
       if (store.state.appLoading) return AppLoadingComponent();
       return InputScreen(title: "hello");
@@ -23,5 +18,11 @@ var rootHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<S
 });
 
 var questionHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return QuestionListScreen();
+  int topicId = int.tryParse(params["topicId"][0]) ?? 0;
+  return StoreBuilder<AppState>(
+    onInit: (store) => store.dispatch(LoadQuestionsByTopicAction(topicId)()),
+    builder: (context, store) {
+      return QuestionListScreen(topicId: topicId);
+    },
+  );
 });
