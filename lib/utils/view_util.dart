@@ -11,4 +11,8 @@ class ViewUtil {
     if (isChecked) return Colors.blue;
     return Colors.grey;
   }
+
+  static hideKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
 }

@@ -51,8 +51,6 @@ class _ListQuestionScreenState extends State<ListQuestionScreen>
   }
 
   void _onTapItem(BuildContext context, Question question) {
-    Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text(question.id.toString() + ' - ' + question.title)));
   }
 
   Column _buildItem(int position) {

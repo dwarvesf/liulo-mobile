@@ -1,6 +1,5 @@
 import 'package:liulo/model/event.dart';
 import 'package:liulo/model/question.dart';
-import 'package:liulo/model/topic.dart';
 
 class DataUtil {
   static List<Question> getFakeListQuestion() {
@@ -49,96 +48,72 @@ class DataUtil {
     ));
     return items;
   }
-
-  static List<Topic> getFakeListTopic() {
-    List<Topic> items = new List();
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    items.add(new Topic(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListQuestion()));
-    return items;
-  }
-
   static List<Event> getFakeListEvent() {
     List<Event> items = new List();
     items.add(new Event(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListTopic()));
-
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
     items.add(new Event(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListTopic()));
-
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
     items.add(new Event(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListTopic()));
-
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
     items.add(new Event(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListTopic()));
-
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
     items.add(new Event(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListTopic()));
-
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
     items.add(new Event(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListTopic()));
-
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
     items.add(new Event(
-        "1",
-        'Aesymnetes',
-        'If you didn’t have to sleep, what would you do with the extra time?',
-        getFakeListTopic()));
-
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
+    items.add(new Event(
+        "active",
+        "",
+        "Test event",
+        2,
+        "",
+        "This is test event 2",
+        "DLXY"));
     return items;
   }
 }
