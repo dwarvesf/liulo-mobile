@@ -88,6 +88,7 @@ class _ListEventScreenState extends State<ListEventScreen>
 
   ListView _buildList(context) {
     return new ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         itemCount: listEvent.length,
         padding: const EdgeInsets.all(5.0),
         itemBuilder: (context, position) {

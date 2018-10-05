@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_listview/easy_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:liulo/model/event.dart';
 import 'package:liulo/model/topic.dart';
@@ -7,6 +8,7 @@ import 'package:liulo/screen/list_question/list_question_screen.dart';
 import 'package:liulo/screen/list_topic/list_topic_presenter.dart';
 import 'package:liulo/utils/shimmer.dart';
 import 'package:liulo/utils/token_util.dart';
+import 'package:liulo/utils/view_util.dart';
 
 class ListTopicScreen extends StatefulWidget {
   ListTopicScreen({Key key, this.title, this.event}) : super(key: key);
@@ -24,6 +26,12 @@ class _ListTopicScreenState extends State<ListTopicScreen>
   List<Topic> listTopic = new List();
   ListTopicPresenter listTopicPresenter;
   bool isLoading = true;
+
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController descController = new TextEditingController();
+  TextEditingController speakerController = new TextEditingController();
 
   _ListTopicScreenState() {
     listTopicPresenter = new ListTopicPresenter(this);
@@ -85,15 +93,6 @@ class _ListTopicScreenState extends State<ListTopicScreen>
         ),
       ],
     );
-  }
-
-  ListView _buildList(context) {
-    return new ListView.builder(
-        itemCount: listTopic.length,
-        padding: const EdgeInsets.all(5.0),
-        itemBuilder: (context, position) {
-          return _buildItem(position);
-        });
   }
 
   Scaffold buildShimmer() {
@@ -169,15 +168,104 @@ class _ListTopicScreenState extends State<ListTopicScreen>
     if (isLoading) {
       return buildShimmer();
     } else {
-      return new Scaffold(
-        appBar: new AppBar(title: new Text(widget.title)),
-        body: RefreshIndicator(
-          key: refreshKey,
-          child: _buildList(context),
-          onRefresh: refreshList,
-        ),
-      );
+      return buildLisView();
     }
+  }
+
+  Scaffold buildLisView() {
+    return Scaffold(
+      appBar: new AppBar(title: new Text(widget.title)),
+      body: RefreshIndicator(
+        key: refreshKey,
+        child: EasyListView(
+            headerBuilder: ((context) =>
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Container(
+                        margin: const EdgeInsets.only(
+                            left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
+                        child: TextFormField(
+                          decoration: new InputDecoration(hintText: "Name"),
+                          controller: nameController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter Name';
+                            }
+                          },
+                        ),
+                      ),
+                      new Container(
+                        margin: const EdgeInsets.only(
+                            left: 20.0, right: 20.0, bottom: 10.0),
+                        child: TextFormField(
+                          controller: descController,
+                          decoration:
+                          new InputDecoration(hintText: "Description"),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter Description';
+                            }
+                          },
+                        ),
+                      ),
+                      new Container(
+                        margin: const EdgeInsets.only(
+                            left: 20.0, right: 20.0, bottom: 10.0),
+                        child: TextFormField(
+                          decoration:
+                          new InputDecoration(hintText: "Speaker Name"),
+                          controller: speakerController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter Speaker Name';
+                            }
+                          },
+                        ),
+                      ),
+                      Center(
+                        child: new ButtonTheme(
+                          minWidth: 150.0,
+                          height: 36.0,
+                          child: RaisedButton(
+                            textColor: Colors.white,
+                            onPressed: onCreateClick,
+                            color: Colors.blue,
+                            padding: const EdgeInsets.all(8.0),
+                            child: new Text(
+                              "Create Topic",
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            itemCount: listTopic.length,
+
+            itemBuilder: (context, position) {
+              return _buildItem(position);
+            }),
+        onRefresh: refreshList,
+      ),
+
+    );
+  }
+
+  Future<Null> onCreateClick() async {
+    var token = await TokenUtil.getToken();
+    if (token.isNotEmpty) {
+      if (_formKey.currentState.validate()) {
+        ViewUtil.hideKeyboard(context);
+        listTopicPresenter.createTopic(
+            nameController.text, descController.text, speakerController.text,
+            widget.event.id, token);
+      }
+    }
+
+    return null;
   }
 
   @override
@@ -191,5 +279,14 @@ class _ListTopicScreenState extends State<ListTopicScreen>
   @override
   void onGetDataFailed(String error) {
     setLoading(false);
+  }
+
+  @override
+  void onCreateFailed(String error) {
+  }
+
+  @override
+  void onCreateSuccess(Topic topic) {
+    refreshList();
   }
 }

@@ -17,6 +17,7 @@ dependencies:
   path_provider: ^0.4.1
   google_sign_in: ^3.0.5
   shared_preferences: ^0.4.3
+  easy_listview: "^0.0.4"
   flutter:
     sdk: flutter
 
