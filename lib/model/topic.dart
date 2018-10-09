@@ -1,10 +1,10 @@
 class Topic {
   String status;
-  Null startedAt;
+  String startedAt;
   String speakerNames;
   String name;
   int id;
-  Null endedAt;
+  String endedAt;
   String description;
 
   Topic(this.status,

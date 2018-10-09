@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:liulo/model/response/create_event_response.dart';
+import 'package:liulo/model/response/create_topic_response.dart';
 import 'package:liulo/model/response/list_event_response.dart';
 import 'package:liulo/model/response/list_topic_response.dart';
 import 'package:liulo/model/response/login_response.dart';
@@ -12,7 +13,7 @@ class RestDatasource {
   static final BASE_URL = "http://192.168.40.156:4000/api/v1";
   static final LOGIN_URL = BASE_URL + "/login_google";
   static final LIST_EVENT = BASE_URL + "/event";
-
+  static final TOPIC = BASE_URL + "/topic";
   Future<LoginResponse> login(String body) {
     return _netUtil
         .post(LOGIN_URL, body: body, headers: getHeadersNonToken())
@@ -63,6 +64,19 @@ class RestDatasource {
       var createEventResponse = new CreateEventResponse();
       createEventResponse = CreateEventResponse.fromJson(res);
       if (createEventResponse != null) return createEventResponse;
+    });
+  }
+
+  Future<CreateTopicResponse> createTopic(String body, String token) {
+    return _netUtil
+        .post(TOPIC, body: body, headers: getHeaders(token))
+        .then((dynamic res) {
+      print(res.toString());
+      if (res["error"] != null && res["error"])
+        throw new Exception(res["error_msg"]);
+      var createTopicResponse = new CreateTopicResponse();
+      createTopicResponse = CreateTopicResponse.fromJson(res);
+      if (createTopicResponse != null) return createTopicResponse;
     });
   }
 
