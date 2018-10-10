@@ -1,0 +1,125 @@
+matrix:
+  # This causes the build to complete immediately upon first failure or once required jobs are green.
+  fast_finish: true
+
+  # Building APK/IPA takes a long time; do not wait for them to finish.
+  allow_failures:
+  - env: JOB=APK
+  - env: JOB=IPA
+
+  include:
+    # Runs unit tests without build.
+    - env: JOB=PR
+      os: linux
+      language: generic
+      sudo: false
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - libstdc++6
+            - fonts-droid
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
+      script:
+        - ./flutter/bin/flutter test
+
+    # Builds an APK.
+    - env: JOB=APK
+      os: linux
+      language: android
+      licenses:
+      - android-sdk-preview-license-.+
+      - android-sdk-license-.+
+      - google-gdk-license-.+
+      android:
+        components:
+        - tools
+        - platform-tools
+        - build-tools-28.0.3
+        - android-28
+        - sys-img-armeabi-v7a-google_apis-28
+        - extra-android-m2repository
+        - extra-google-m2repository
+        - extra-google-android-support
+      jdk: oraclejdk8
+      sudo: required
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - libstdc++6
+          - fonts-droid
+      before_install:
+        - gem update --system
+        - gem install fastlane --no-rdoc --no-ri --no-document --quiet
+        - openssl aes-256-cbc -k "$file_enc_key" -in android/key.jks.enc -out android/key.jks -d
+        - openssl aes-256-cbc -k "$file_enc_key" -in android/key.properties.enc -out android/key.properties -d
+        - openssl aes-256-cbc -k "$file_enc_key" -in android/app/google-services.json.enc -out android/app/google-services.json -d
+      install:
+        - yes | sdkmanager "platforms;android-27"
+        - yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" #&> /dev/null
+        - yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2" #&> /dev/null
+      before_script:
+      - wget http://services.gradle.org/distributions/gradle-4.6-bin.zip
+      - unzip -qq gradle-4.6-bin.zip
+      - export GRADLE_HOME=$PWD/gradle-4.6
+      - export PATH=$GRADLE_HOME/bin:$PATH
+      - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
+      script:
+      - ./flutter/bin/flutter build apk --release
+      - 'if [ $TRAVIS_BRANCH =~ "release/.*" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
+          cd android && fastlane beta CRASHLYTICS_TOKEN:$CRASHLYTICS_TOKEN CRASHLYTICS_SECRET:$CRASHLYTICS_SECRET CRASHLYTICS_EMAILS:$CRASHLYTICS_EMAILS SLACK_CHANNEL:$SLACK_CHANNEL SLACK_URL:$SLACK_URL;
+        fi'
+      - 'if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
+          cd android && fastlane deploy CRASHLYTICS_TOKEN:$CRASHLYTICS_TOKEN CRASHLYTICS_SECRET:$CRASHLYTICS_SECRET CRASHLYTICS_EMAILS:$CRASHLYTICS_EMAILS SLACK_CHANNEL:$SLACK_CHANNEL SLACK_URL:$SLACK_URL;
+        fi'
+
+    # Builds an IPA.
+    - env: JOB=IPA
+      os: osx
+      language: generic
+      osx_image: xcode10
+      sudo: required
+      before_install:
+        - export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+        - gem update --system
+        - gem install fastlane --no-rdoc --no-ri --no-document --quiet
+        - pod repo update
+        - openssl aes-256-cbc -k "$file_enc_key" -in ios/Runner/GoogleService-Info.plist.enc -out ios/Runner/GoogleService-Info.plist -d
+      before_script:
+      - pip install six
+      - brew update
+      - brew install --HEAD usbmuxd
+      - brew install --HEAD libimobiledevice
+      - brew install ideviceinstaller
+      - brew install ios-deploy
+      - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
+      script:
+      - ./flutter/bin/flutter build ios --release --no-codesign
+
+# blocklist
+branches:
+  except:
+  - legacy
+  - experimental
+  - test
+  - /^feature\/.*$/
+
+# safelist
+branches:
+  only:
+  - master
+  - develop
+  - /^release\/.*$/
+  - /^hotfix\/.*$/
+
+cache:
+  directories:
+  - $HOME/.pub-cache
+
+env:
+  global:
+    secure: NcVbFC33TBWVHzLZb/FBwt4ilbs6B+mxBH6e9QG+qH9mjqy9mbiZCqDWD6Kxb1dT2niNNmzrmFvDsNtweoaYn+JtlOvADZFQQv/X3PJ0SR0Qh4YsU2l3sZjrsTQEjXkNiHPk5mrs4o+JcdRGPfTe1yUl7zDRvrOWaxLij95DJrhvtQxQ1+XWmiyIvL7sJ24JTj7q0jBY9iqjuIdDk13j/DLCLLdUvDJ7OlCFb5moIUWvwD9o/Q6Tn3S8mnayAjLGEpLhWk6BKMhsv/eqdQZpfiAbtVeaOwKTMp+2dc9c+atasqpxlQEtty4fLeja0Ja4M7kku3Xg0WgyaVo0NS+W8oI/QaxomSMf3fm1I1o/ppzkaKEvW3e3efJYwGrVH9Abaex6PS5Tnno8dLT1zErbVoZgCMSGFqmB+bTV9snD7pzW0muUi3Lwss9/bc9HDU6K5GJ5LQ75sHPKM5Ltl5g8WYIyZCt8lPH+oxPRBZQz9LO3oMKAUUctzypl37/r3PQdAjYvTHje9srB2ngkcoRegOCIs8MFuj/AO9AqFJiiFoGJUym1JjbVzHddPRFOyB5ipMYiHEd1lYmkr2S+rmNzLuck7uN5FPb3fMZgmdrCdUsgAni9TPCxEWEZjYd/k+iM9P+cLuUvR46L2l4VWiIx3Kzn67oME8E3NBrMonAIIxE=

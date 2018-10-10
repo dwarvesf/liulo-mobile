@@ -1,0 +1,21 @@
+ext {
+    def appInfo = new groovy.json.JsonSlurper().parseText((new File("$rootDir/../app.json")).text)
+
+    versionMajor = appInfo.androidMajor
+    versionMinor = appInfo.androidMinor
+    versionPatch = appInfo.androidPatch
+    versionBuild = appInfo.androidBuild
+    versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
+    versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
+    minSdkVersion = 21
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    buildToolsVersion = "28.0.3"
+    supportLibVersion = "28.0.0"
+
+    lib = [
+            EasyPreferences         : '1.8.1',
+            Otto                    : '1.3.8',
+            Fresco                  : '1.9.0'
+    ]
+}
