@@ -35,7 +35,7 @@ class _ListQuestionScreenState extends State<ListQuestionScreen>
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     setState(() {
       listQuestionPresenter.fakeData();

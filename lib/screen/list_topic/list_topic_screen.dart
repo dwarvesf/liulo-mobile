@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:easy_listview/easy_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:liulo/model/event.dart';
 import 'package:liulo/model/topic.dart';
 import 'package:liulo/screen/list_question/list_question_screen.dart';
 import 'package:liulo/screen/list_topic/list_topic_presenter.dart';
+import 'package:liulo/utils/easy_listview.dart';
 import 'package:liulo/utils/shimmer.dart';
 import 'package:liulo/utils/token_util.dart';
 import 'package:liulo/utils/view_util.dart';

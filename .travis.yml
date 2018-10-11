@@ -21,7 +21,7 @@ matrix:
             - libstdc++6
             - fonts-droid
       before_script:
-        - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
+        - git clone https://github.com/flutter/flutter.git -b "v0.9.4"
       script:
         - ./flutter/bin/flutter test
 
@@ -67,7 +67,7 @@ matrix:
       - unzip -qq gradle-4.6-bin.zip
       - export GRADLE_HOME=$PWD/gradle-4.6
       - export PATH=$GRADLE_HOME/bin:$PATH
-      - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
+      - git clone https://github.com/flutter/flutter.git -b "v0.9.4"
       script:
       - ./flutter/bin/flutter build apk --release
       - 'if [ $TRAVIS_BRANCH =~ "release/.*" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
@@ -96,7 +96,7 @@ matrix:
       - brew install --HEAD libimobiledevice
       - brew install ideviceinstaller
       - brew install ios-deploy
-      - git clone https://github.com/flutter/flutter.git -b "v0.8.2"
+      - git clone https://github.com/flutter/flutter.git -b "v0.9.4"
       script:
       - ./flutter/bin/flutter build ios --release --no-codesign
 

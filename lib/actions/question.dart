@@ -61,10 +61,10 @@ class UpVoteQuestionAction {
         Question question = store.state.questions.firstWhere((question) => question.id == questionId, orElse: null);
         if (question == null) return Future.error(NullThrownError());
         try {
-          await Application.questionRepository.upVote(questionId);
           question.voteCount += 1;
           question.isVoted = true;
           store.dispatch(UpdateQuestionAction(question));
+          await Application.questionRepository.upVote(questionId);
           return question;
         } catch (e) {
           print("UpVoteQuestionAction: error: ${e.toString()}");
@@ -82,10 +82,10 @@ class UnVoteQuestionAction {
     Question question = store.state.questions.firstWhere((question) => question.id == questionId, orElse: null);
     if (question == null) return Future.error(NullThrownError());
     try {
-      await Application.questionRepository.upVote(questionId);
       question.voteCount -= 1;
       question.isVoted = false;
       store.dispatch(UpdateQuestionAction(question));
+      await Application.questionRepository.upVote(questionId);
       return question;
     } catch (e) {
       print("UnVoteQuestionAction: error: ${e.toString()}");

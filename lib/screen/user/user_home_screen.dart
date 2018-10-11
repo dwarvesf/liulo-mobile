@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:liulo/application.dart';
 import 'package:liulo/model/user.dart';
+import 'package:liulo/routes.dart';
 import 'package:liulo/screen/create_event/create_event_screen.dart';
 import 'package:liulo/screen/list_event/list_event_screen.dart';
 import 'package:liulo/utils/signin_util.dart';
@@ -62,6 +64,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
+  void join() {
+    Application.router.navigateTo(context, "${Routes.questions}/1");
+  }
+
   Future<Null> _handleSignOut() async {
     SignInUtil.googleSignIn.disconnect();
     Navigator.pop(context);
@@ -113,7 +119,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 minWidth: 150.0,
                 height: 36.0,
                 child: RaisedButton(
-                  onPressed: subtractNumbers,
+                  onPressed: join,
                   textColor: Colors.white,
                   color: Colors.red,
                   padding: const EdgeInsets.all(8.0),

@@ -12,7 +12,7 @@ var rootHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<S
     onInit: (store) => store.dispatch(RehydrateAction()()),
     builder: (context, store) {
       if (store.state.appLoading) return AppLoadingComponent();
-      return InputScreen(title: "hello");
+      return InputScreen(title: "LiuLo");
     },
   );
 });
