@@ -32,5 +32,5 @@ List<Question> _delete(List<Question> state, DeleteQuestionAction action) {
 }
 
 List<Question> _replaceAll(List<Question> state, ReplaceQuestionsAction action) {
-  return action.questions..sort();
+  return List.from(action.questions)..sort();
 }

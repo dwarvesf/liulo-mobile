@@ -21,36 +21,38 @@ class QuestionListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 128.0,
-        child: Card(
-          color: Colors.primaries[item.id % Colors.primaries.length],
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  IconButton(
+      child: Card(
+        color: Colors.primaries[item.id % Colors.primaries.length],
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 16.0),
+                  child: IconButton(
                     color: item.isVoted ? Colors.orange : Colors.black,
                     icon: const Icon(Icons.thumb_up),
                     onPressed: item.isVoted ? onUnVotePressed : onUpVotePressed,
-                    tooltip: item.isVoted ? 'Un Vote' : 'Up Vote',
+                    tooltip: item.isVoted ? 'Unvote' : 'Upvote',
                   ),
-                  new Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          item.description,
-                          style: Theme.of(context).textTheme.title.copyWith(color: Colors.white),
-                          softWrap: true,
-                          maxLines: 3,
-                        ),
-                      ],
-                    ),
+                ),
+                new Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        item.description,
+                        style: Theme.of(context).textTheme.title.copyWith(color: Colors.white),
+                        softWrap: true,
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

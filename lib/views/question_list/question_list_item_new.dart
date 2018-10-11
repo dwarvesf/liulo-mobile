@@ -22,6 +22,7 @@ class _State extends State<QuestionListItemNew> {
   }
 
   void _onCreatePressed() {
+    if (questionTextController.text.isEmpty) return;
     widget.onCreatePressed(Question(description: questionTextController.text));
     questionTextController.clear();
   }

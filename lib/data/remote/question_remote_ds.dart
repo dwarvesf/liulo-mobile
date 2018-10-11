@@ -5,7 +5,7 @@ import 'package:liulo/models/question.dart';
 class QuestionRemoteDataSource {
   final Duration delay;
 
-  const QuestionRemoteDataSource({this.delay = const Duration(seconds: 1)});
+  const QuestionRemoteDataSource({this.delay = const Duration(milliseconds: 200)});
 
   /// Mock that fetches data from an API after a short delay
   Future<List<Question>> getByTopic(int topicId) async {
