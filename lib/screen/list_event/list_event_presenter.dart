@@ -1,6 +1,8 @@
 import 'package:liulo/data/rest_ds.dart';
 import 'package:liulo/model/event.dart';
 import 'package:liulo/model/response/list_event_response.dart';
+
+
 abstract class ListEventScreenContract {
   void onGetDataSuccess(List<Event> items);
 

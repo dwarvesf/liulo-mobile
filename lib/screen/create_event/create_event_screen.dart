@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:liulo/model/event.dart';
 import 'package:liulo/screen/create_event/create_event_presenter.dart';
@@ -45,8 +46,14 @@ class _CreateEventScreenState extends State<CreateEventScreen>
       if (_formKey.currentState.validate()) {
         setLoading(true);
         ViewUtil.hideKeyboard(context);
-        createEventPresenter.createEvent(
-            nameController.text, descController.text, token);
+
+        var connectivityResult = await (new Connectivity().checkConnectivity());
+        if (connectivityResult == ConnectivityResult.none) {
+          ViewUtil.showDialogConnection(context);
+        } else {
+          createEventPresenter.createEvent(
+              nameController.text, descController.text, token);
+        }
       }
     }
 

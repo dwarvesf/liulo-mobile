@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:liulo/model/event.dart';
 import 'package:liulo/screen/list_event/list_event_presenter.dart';
 import 'package:liulo/screen/list_topic/list_topic_screen.dart';
 import 'package:liulo/utils/shimmer.dart';
 import 'package:liulo/utils/token_util.dart';
+import 'package:liulo/utils/view_util.dart';
 
 class ListEventScreen extends StatefulWidget {
   ListEventScreen({Key key, this.title}) : super(key: key);
@@ -38,7 +40,12 @@ class _ListEventScreenState extends State<ListEventScreen>
 
     var token = await TokenUtil.getToken();
     if (token.isNotEmpty) {
-      listEventPresenter.getListEvent(token);
+      var connectivityResult = await (new Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        ViewUtil.showDialogConnection(context);
+      } else {
+        listEventPresenter.getListEvent(token);
+      }
     }
 
     return null;

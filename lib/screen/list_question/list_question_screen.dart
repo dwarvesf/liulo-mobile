@@ -1,16 +1,19 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:liulo/model/question.dart';
+import 'package:liulo/model/topic.dart';
 import 'package:liulo/screen/list_question/list_question_presenter.dart';
 import 'package:liulo/utils/shimmer.dart';
+import 'package:liulo/utils/token_util.dart';
 import 'package:liulo/utils/view_util.dart';
 
 class ListQuestionScreen extends StatefulWidget {
-  ListQuestionScreen({Key key, this.title}) : super(key: key);
+  ListQuestionScreen({Key key, this.title, this.topic}) : super(key: key);
 
   final String title;
-
+  final Topic topic;
   @override
   _ListQuestionScreenState createState() => new _ListQuestionScreenState();
 }
@@ -35,11 +38,15 @@ class _ListQuestionScreenState extends State<ListQuestionScreen>
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
 
-    await Future.delayed(Duration(seconds: 1));
-
-    setState(() {
-      listQuestionPresenter.fakeData();
-    });
+    var token = await TokenUtil.getToken();
+    if (token.isNotEmpty) {
+      var connectivityResult = await (new Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        ViewUtil.showDialogConnection(context);
+      } else {
+        listQuestionPresenter.getListTopic(token, widget.topic.id);
+      }
+    }
 
     return null;
   }
@@ -59,27 +66,22 @@ class _ListQuestionScreenState extends State<ListQuestionScreen>
         Divider(height: 5.0),
         ListTile(
           title: Text(
-            '${listQuestion[position].title}',
+            '${listQuestion[position].description}',
             style: TextStyle(
               color: Colors.deepOrangeAccent,
             ),
           ),
-          subtitle: Text(
-            '${listQuestion[position].body}',
-            style: new TextStyle(
-              fontStyle: FontStyle.italic,
-            ),
-          ),
+
           leading: Column(
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.check_circle),
                 color: ViewUtil.getColorCheckButton(
-                    listQuestion[position].isChecked),
+                    listQuestion[position].status),
                 onPressed: () {
                   setState(() {
-                    listQuestion[position].isChecked = ViewUtil.getValueCheck(
-                        listQuestion[position].isChecked);
+                    listQuestion[position].status = ViewUtil.getValueCheck(
+                        listQuestion[position].status);
                   });
                 },
               ),
@@ -189,5 +191,10 @@ class _ListQuestionScreenState extends State<ListQuestionScreen>
     setState(() {
       this.listQuestion = items;
     });
+  }
+
+  @override
+  void onGetDataFailed(String error) {
+    setLoading(false);
   }
 }
