@@ -100,9 +100,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation "com.google.firebase:firebase-core:16.0.1"
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
 }
+
 apply plugin: 'com.google.gms.google-services'
+
+// Work around for gradle-plugin compatibility
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true

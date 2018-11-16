@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:liulo/application.dart';
 import 'package:liulo/models/question.dart';
 
 class QuestionListItemNew extends StatefulWidget {
@@ -12,19 +13,20 @@ class QuestionListItemNew extends StatefulWidget {
 
 class _State extends State<QuestionListItemNew> {
   // Create a text controller. We will use it to retrieve the current value of the TextField!
-  final questionTextController = TextEditingController();
+  final _questionTextController = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
-    questionTextController.dispose();
+    _questionTextController.dispose();
     super.dispose();
   }
 
   void _onCreatePressed() {
-    if (questionTextController.text.isEmpty) return;
-    widget.onCreatePressed(Question(description: questionTextController.text));
-    questionTextController.clear();
+    if (_questionTextController.text.isEmpty) return;
+    widget.onCreatePressed(Question(description: _questionTextController.text));
+    Application.appSocket.send(_questionTextController.text);
+    _questionTextController.clear();
   }
 
   @override
@@ -46,7 +48,7 @@ class _State extends State<QuestionListItemNew> {
                         decoration: InputDecoration(border: InputBorder.none, hintText: 'Ask a question...'),
                         style: Theme.of(context).textTheme.title,
                         maxLines: 3,
-                        controller: questionTextController,
+                        controller: _questionTextController,
                       ),
                     ],
                   ),

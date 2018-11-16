@@ -12,7 +12,7 @@ class QuestionLocalDataSource implements FileDataSource<List<Question>> {
   final String tag;
   final Future<Directory> Function() getDirectory;
 
-  const QuestionLocalDataSource(this.tag, this.getDirectory);
+  QuestionLocalDataSource(this.tag, this.getDirectory);
 
   @override
   Future<List<Question>> load() async {

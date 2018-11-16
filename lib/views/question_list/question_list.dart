@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:liulo/actions/index.dart';
+import 'package:liulo/locales/app_localizations.dart';
 import 'package:liulo/reducers/index.dart';
 import 'package:liulo/models/question.dart';
 import 'package:liulo/views/question_list/question_list_item.dart';
@@ -42,7 +43,7 @@ class QuestionListScreen extends StatelessWidget {
         converter: (Store<AppState> store) => _ViewModel.create(store),
         builder: (BuildContext context, _ViewModel viewModel) => Scaffold(
               appBar: AppBar(
-                title: const Text('Questions'),
+                title: Text(AppLocalizations.of(context).title),
               ),
               body: ListView.builder(
                 itemCount: viewModel.items.length + 1,
