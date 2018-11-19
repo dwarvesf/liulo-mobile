@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:liulo/application.dart';
 import 'package:liulo/models/question.dart';
 
@@ -25,7 +26,10 @@ class _State extends State<QuestionListItemNew> {
   void _onCreatePressed() {
     if (_questionTextController.text.isEmpty) return;
     widget.onCreatePressed(Question(description: _questionTextController.text));
-    Application.appSocket.send(_questionTextController.text);
+    Application.socketRepository.send(_questionTextController.text);
+    Application.locationRepository.getCurrentPosition(LocationAccuracy.high).then((position) {
+      print(position);
+    });
     _questionTextController.clear();
   }
 

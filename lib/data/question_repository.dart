@@ -5,11 +5,11 @@ import 'package:liulo/data/remote/question_remote_ds.dart';
 import 'package:liulo/models/question.dart';
 import 'package:liulo/repositories/question_repository.dart';
 
-class QuestionDataRepository implements QuestionRepository {
+class FlutterQuestionRepository implements QuestionRepository {
   final QuestionLocalDataSource _localDS;
   final QuestionRemoteDataSource _remoteDS;
 
-  const QuestionDataRepository({
+  const FlutterQuestionRepository({
     QuestionLocalDataSource localDS,
     QuestionRemoteDataSource remoteDS,
   })  : _localDS = localDS,

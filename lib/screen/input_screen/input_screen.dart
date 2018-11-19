@@ -157,6 +157,10 @@ class _InputScreenState extends State<InputScreen>
     Application.router.navigateTo(context, "${Routes.questions}/1");
   }
 
+  void goToMapScreen() {
+    Application.router.navigateTo(context, Routes.map);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (visibilityView) {
@@ -223,6 +227,20 @@ class _InputScreenState extends State<InputScreen>
               padding: const EdgeInsets.all(8.0),
               child: new Text(
                 "Login",
+              ),
+            ),
+          ),
+
+          new ButtonTheme(
+            minWidth: 150.0,
+            height: 36.0,
+            child: RaisedButton(
+              onPressed: goToMapScreen,
+              textColor: Colors.white,
+              color: Colors.red,
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                "Map View",
               ),
             ),
           ),

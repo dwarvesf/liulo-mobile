@@ -2,10 +2,68 @@ PODS:
   - Crashlytics (3.10.8):
     - Fabric (~> 1.7.12)
   - Fabric (1.7.12)
+  - file_picker (0.0.1):
+    - Flutter
+  - Firebase/Core (5.11.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 5.3.0)
+  - Firebase/CoreOnly (5.11.0):
+    - FirebaseCore (= 5.1.6)
+  - Firebase/Messaging (5.11.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (= 3.2.1)
+  - firebase_messaging (0.0.1):
+    - Firebase/Core
+    - Firebase/Messaging
+    - Flutter
+  - FirebaseAnalytics (5.3.0):
+    - FirebaseCore (~> 5.1)
+    - FirebaseInstanceID (~> 3.3)
+    - GoogleAppMeasurement (~> 5.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
+    - GoogleUtilities/Network (~> 5.2)
+    - "GoogleUtilities/NSData+zlib (~> 5.2)"
+    - nanopb (~> 0.3)
+  - FirebaseAnalyticsInterop (1.1.0)
+  - FirebaseCore (5.1.6):
+    - GoogleUtilities/Logger (~> 5.2)
+  - FirebaseInstanceID (3.3.0):
+    - FirebaseCore (~> 5.1)
+    - GoogleUtilities/Environment (~> 5.3)
+    - GoogleUtilities/UserDefaults (~> 5.3)
+  - FirebaseMessaging (3.2.1):
+    - FirebaseAnalyticsInterop (~> 1.1)
+    - FirebaseCore (~> 5.1)
+    - FirebaseInstanceID (~> 3.0)
+    - GoogleUtilities/Environment (~> 5.2)
+    - GoogleUtilities/Reachability (~> 5.2)
+    - Protobuf (~> 3.1)
   - Flutter (1.0.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - geolocator (2.1.0):
+    - Flutter
+  - google_api_availability (1.0.4):
+    - Flutter
+  - google_maps_flutter (0.0.1):
+    - Flutter
+    - GoogleMaps
   - google_sign_in (0.0.1):
     - Flutter
     - GoogleSignIn (~> 4.0)
+  - GoogleAppMeasurement (5.3.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
+    - GoogleUtilities/Network (~> 5.2)
+    - "GoogleUtilities/NSData+zlib (~> 5.2)"
+    - nanopb (~> 0.3)
+  - GoogleMaps (2.7.0):
+    - GoogleMaps/Maps (= 2.7.0)
+  - GoogleMaps/Base (2.7.0)
+  - GoogleMaps/Maps (2.7.0):
+    - GoogleMaps/Base
   - GoogleSignIn (4.2.0):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
@@ -19,6 +77,24 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.4)
     - "GoogleToolboxForMac/NSString+URLArguments (= 2.1.4)"
   - "GoogleToolboxForMac/NSString+URLArguments (2.1.4)"
+  - GoogleUtilities/AppDelegateSwizzler (5.3.4):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (5.3.4)
+  - GoogleUtilities/Logger (5.3.4):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (5.3.4):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (5.3.4):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (5.3.4)"
+  - GoogleUtilities/Reachability (5.3.4):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (5.3.4):
+    - GoogleUtilities/Logger
   - GTMOAuth2 (1.1.6):
     - GTMSessionFetcher (~> 1.1)
   - GTMSessionFetcher (1.2.0):
@@ -26,44 +102,119 @@ PODS:
   - GTMSessionFetcher/Core (1.2.0)
   - GTMSessionFetcher/Full (1.2.0):
     - GTMSessionFetcher/Core (= 1.2.0)
+  - image_picker (0.0.1):
+    - Flutter
+  - nanopb (0.3.901):
+    - nanopb/decode (= 0.3.901)
+    - nanopb/encode (= 0.3.901)
+  - nanopb/decode (0.3.901)
+  - nanopb/encode (0.3.901)
   - path_provider (0.0.1):
     - Flutter
+  - permission_handler (2.1.0):
+    - Flutter
+  - Protobuf (3.6.1)
+  - shared_preferences (0.0.1):
+    - Flutter
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
   - Crashlytics
   - Fabric
+  - file_picker (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-0.1.6/ios`)
+  - firebase_messaging (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-2.1.0/ios`)
   - Flutter (from `/Volumes/Data/Software/flutter/bin/cache/artifacts/engine/ios`)
-  - google_sign_in (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.0.5/ios`)
+  - geolocator (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-2.1.0/ios`)
+  - google_api_availability (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_api_availability-1.0.4/ios`)
+  - google_maps_flutter (from `/Volumes/Data/Software/flutter/.pub-cache/git/plugins-535124fdd08b4fa7ce9f596f96b76e2061f3744f/packages/google_maps_flutter/ios`)
+  - google_sign_in (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.2.4/ios`)
   - GoogleSignIn
+  - image_picker (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.4.10/ios`)
   - path_provider (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.1/ios`)
+  - permission_handler (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-2.1.0/ios`)
+  - shared_preferences (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/ios`)
+  - "sqflite (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-0.12.2+1/ios`)"
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Crashlytics
     - Fabric
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseAnalyticsInterop
+    - FirebaseCore
+    - FirebaseInstanceID
+    - FirebaseMessaging
+    - FMDB
+    - GoogleAppMeasurement
+    - GoogleMaps
     - GoogleSignIn
     - GoogleToolboxForMac
+    - GoogleUtilities
     - GTMOAuth2
     - GTMSessionFetcher
+    - nanopb
+    - Protobuf
 
 EXTERNAL SOURCES:
+  file_picker:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-0.1.6/ios"
+  firebase_messaging:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-2.1.0/ios"
   Flutter:
     :path: "/Volumes/Data/Software/flutter/bin/cache/artifacts/engine/ios"
+  geolocator:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-2.1.0/ios"
+  google_api_availability:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_api_availability-1.0.4/ios"
+  google_maps_flutter:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/git/plugins-535124fdd08b4fa7ce9f596f96b76e2061f3744f/packages/google_maps_flutter/ios"
   google_sign_in:
-    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.0.5/ios"
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.2.4/ios"
+  image_picker:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.4.10/ios"
   path_provider:
     :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.1/ios"
+  permission_handler:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-2.1.0/ios"
+  shared_preferences:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/ios"
+  sqflite:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-0.12.2+1/ios"
 
 SPEC CHECKSUMS:
   Crashlytics: 058dc1ba579f6c100bc60a6878703779bff383c4
   Fabric: d7387db9a31aadff63b147a4b91d982c53afaa4f
+  file_picker: 78c3344d9b2c343bb3090c2f032b796242ebaea7
+  Firebase: b48f9e653da971ecce5b8c749684bc8bb2d26bd3
+  firebase_messaging: a5f5d4a9491b660f33a1f94bd0596558f820bad1
+  FirebaseAnalytics: 63202d2665de4e6adcbdce189135255d8b5962ba
+  FirebaseAnalyticsInterop: e5f21be9af6548372e2f0815834ff909bff395a2
+  FirebaseCore: d16552f06821489ce1affe2e5e3e5593402ddfe3
+  FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
+  FirebaseMessaging: 0f14a264b0d7f867e8eff5d3556bc5d0d4e57888
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  geolocator: 4adbfa4f25078e702f9b790bb49e4ff52158df6d
+  google_api_availability: b19830d6be60d6b92dce5fc5b9137c31b04afbf1
+  google_maps_flutter: 6449d5918d3f1a69a37dc9c557bbad7bb9bcf0e9
   google_sign_in: cbeb57b96679823d14df6b2240b629b983a42d79
+  GoogleAppMeasurement: 5029d78f2b438bd30ffb44e6c558b57c21622727
+  GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
   GoogleSignIn: 591e46382014e591269f862ba6e7bc0fbd793532
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
+  GoogleUtilities: abb092d2c12e817fa3e0e7b274987dd72fb86ec3
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
   GTMSessionFetcher: 0c4baf0a73acd0041bf9f71ea018deedab5ea84e
+  image_picker: ee00aab0487cedc80a304085219503cc6d0f2e22
+  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
+  permission_handler: ffc5769b295893830703e8a5b9101e47e12da6af
+  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
+  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
+  sqflite: 801b6b0983f722fa29baf00d1476e4556ada6de4
 
 PODFILE CHECKSUM: f22130319ef92be88ad0977246cde8f8ad56f8af
 
