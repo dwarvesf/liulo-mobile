@@ -161,6 +161,10 @@ class _InputScreenState extends State<InputScreen>
     Application.router.navigateTo(context, Routes.map);
   }
 
+  void goToVideoPlayerScreen() {
+    Application.router.navigateTo(context, Routes.videoPlayer);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (visibilityView) {
@@ -241,6 +245,20 @@ class _InputScreenState extends State<InputScreen>
               padding: const EdgeInsets.all(8.0),
               child: new Text(
                 "Map View",
+              ),
+            ),
+          ),
+
+          new ButtonTheme(
+            minWidth: 150.0,
+            height: 36.0,
+            child: RaisedButton(
+              onPressed: goToVideoPlayerScreen,
+              textColor: Colors.cyan,
+              color: Colors.red,
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                "Video Player",
               ),
             ),
           ),

@@ -40,6 +40,7 @@ dependencies:
   redux_thunk: ^0.2.0
   sqflite: ^0.12.1
   shared_preferences: ^0.4.3
+  video_player: ^0.7.2
   web_socket_channel: ^1.0.9
   connectivity: ^0.3.2
 

@@ -119,6 +119,8 @@ PODS:
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
+  - video_player (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Crashlytics
@@ -136,6 +138,7 @@ DEPENDENCIES:
   - permission_handler (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-2.1.0/ios`)
   - shared_preferences (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/ios`)
   - "sqflite (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-0.12.2+1/ios`)"
+  - video_player (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.7.2/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -183,6 +186,8 @@ EXTERNAL SOURCES:
     :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/ios"
   sqflite:
     :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-0.12.2+1/ios"
+  video_player:
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.7.2/ios"
 
 SPEC CHECKSUMS:
   Crashlytics: 058dc1ba579f6c100bc60a6878703779bff383c4
@@ -215,6 +220,7 @@ SPEC CHECKSUMS:
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
   sqflite: 801b6b0983f722fa29baf00d1476e4556ada6de4
+  video_player: 906796a841943c8d370ac7c13b18039aa9b56498
 
 PODFILE CHECKSUM: f22130319ef92be88ad0977246cde8f8ad56f8af
 

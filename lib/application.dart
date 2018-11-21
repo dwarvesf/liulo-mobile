@@ -1,10 +1,6 @@
 import 'package:fluro/fluro.dart';
-import 'package:liulo/data/socket_repository.dart';
 import 'package:liulo/push_notif_controller.dart';
 import 'package:liulo/reducers/index.dart';
-import 'package:liulo/data/index.dart';
-import 'package:liulo/data/local/index.dart';
-import 'package:liulo/data/remote/index.dart';
 import 'package:liulo/repositories/index.dart';
 import 'package:liulo/repositories/location_repository.dart';
 import 'package:liulo/repositories/socket_repository.dart';

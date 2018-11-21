@@ -9,6 +9,8 @@ class Routes {
 
   static String map = "/map";
 
+  static String videoPlayer = "/video-player";
+
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       print("ROUTE WAS NOT FOUND !!!");
@@ -19,5 +21,7 @@ class Routes {
     router.define("$questions/:topicId", handler: questionHandler);
 
     router.define(map, handler: mapHandler);
+
+    router.define(videoPlayer, handler: videoPlayerHandler);
   }
 }
