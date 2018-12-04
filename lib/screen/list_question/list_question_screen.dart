@@ -43,6 +43,7 @@ class _ListQuestionScreenState extends State<ListQuestionScreen>
       var connectivityResult = await (new Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
         ViewUtil.showDialogConnection(context);
+        setLoading(false);
       } else {
         listQuestionPresenter.getListTopic(token, widget.topic.id);
       }

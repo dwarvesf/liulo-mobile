@@ -43,6 +43,7 @@ class _ListEventScreenState extends State<ListEventScreen>
       var connectivityResult = await (new Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
         ViewUtil.showDialogConnection(context);
+        setLoading(false);
       } else {
         listEventPresenter.getListEvent(token);
       }
