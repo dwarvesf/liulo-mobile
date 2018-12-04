@@ -53,6 +53,7 @@ class _ListTopicScreenState extends State<ListTopicScreen>
       var connectivityResult = await (new Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
         ViewUtil.showDialogConnection(context);
+        setLoading(false);
       } else {
         listTopicPresenter.getListTopic(token, widget.event.id);
       }
@@ -267,9 +268,15 @@ class _ListTopicScreenState extends State<ListTopicScreen>
     if (token.isNotEmpty) {
       if (_formKey.currentState.validate()) {
         ViewUtil.hideKeyboard(context);
-        listTopicPresenter.createTopic(
-            nameController.text, descController.text, speakerController.text,
-            widget.event.id, token);
+
+        var connectivityResult = await (new Connectivity().checkConnectivity());
+        if (connectivityResult == ConnectivityResult.none) {
+          ViewUtil.showDialogConnection(context);
+        } else {
+          listTopicPresenter.createTopic(
+              nameController.text, descController.text, speakerController.text,
+              widget.event.id, token);
+        }
       }
     }
 
