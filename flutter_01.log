@@ -1,0 +1,92 @@
+Flutter crash report; please file at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter --no-color packages get
+
+## exception
+
+YamlException: Error on line 23, column 2: Expected a key while parsing a block mapping.
+ easy_listview: "^0.0.6"
+ ^
+
+```
+#0      Parser._parseBlockMappingKey (package:yaml/src/parser.dart:448:5)
+#1      Parser._stateMachine (package:yaml/src/parser.dart:86:16)
+#2      Parser.parse (package:yaml/src/parser.dart:47:19)
+#3      Loader._loadMapping (package:yaml/src/loader.dart:171:23)
+#4      Loader._loadNode (package:yaml/src/loader.dart:86:16)
+#5      Loader._loadDocument (package:yaml/src/loader.dart:62:20)
+#6      Loader.load (package:yaml/src/loader.dart:54:20)
+#7      loadYamlDocument (package:yaml/yaml.dart:51:25)
+#8      loadYamlNode (package:yaml/yaml.dart:42:5)
+#9      loadYaml (package:yaml/yaml.dart:34:5)
+#10     _pluginFromPubspec (package:flutter_tools/src/plugins.dart:62:27)
+#11     findPlugins.<anonymous closure> (package:flutter_tools/src/plugins.dart:85:27)
+#12     __InternalLinkedHashMap&_HashVMBase&MapMixin&_LinkedHashMapMixin.forEach (dart:collection/runtime/libcompact_hash.dart:365:8)
+#13     findPlugins (package:flutter_tools/src/plugins.dart:83:12)
+#14     injectPlugins (package:flutter_tools/src/plugins.dart:296:32)
+<asynchronous suspension>
+#15     FlutterProject.ensureReadyForPlatformSpecificTooling (package:flutter_tools/src/project.dart:142:11)
+<asynchronous suspension>
+#16     PackagesGetCommand.runCommand (package:flutter_tools/src/commands/packages.dart:84:23)
+<asynchronous suspension>
+#17     FlutterCommand.verifyThenRunCommand (package:flutter_tools/src/runner/flutter_command.dart:372:18)
+#18     _asyncThenWrapperHelper.<anonymous closure> (dart:async/runtime/libasync_patch.dart:77:64)
+#19     _rootRunUnary (dart:async/zone.dart:1132:38)
+#20     _CustomZone.runUnary (dart:async/zone.dart:1029:19)
+#21     _FutureListener.handleValue (dart:async/future_impl.dart:129:18)
+#22     Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:642:45)
+#23     Future._propagateToListeners (dart:async/future_impl.dart:671:32)
+#24     Future._complete (dart:async/future_impl.dart:476:7)
+#25     _SyncCompleter.complete (dart:async/future_impl.dart:51:12)
+#26     _AsyncAwaitCompleter.complete.<anonymous closure> (dart:async/runtime/libasync_patch.dart:33:20)
+#27     _rootRun (dart:async/zone.dart:1124:13)
+#28     _CustomZone.run (dart:async/zone.dart:1021:19)
+#29     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:947:23)
+#30     _microtaskLoop (dart:async/schedule_microtask.dart:41:21)
+#31     _startMicrotaskLoop (dart:async/schedule_microtask.dart:50:5)
+#32     _runPendingImmediateCallback (dart:isolate/runtime/libisolate_patch.dart:115:13)
+#33     _RawReceivePortImpl._handleMessage (dart:isolate/runtime/libisolate_patch.dart:172:5)
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel beta, v0.8.2, on Mac OS X 10.14 18A391, locale en-VN)
+    • Flutter version 0.8.2 at /Users/thanhnguyen/flutter
+    • Framework revision 5ab9e70727 (5 weeks ago), 2018-09-07 12:33:05 -0700
+    • Engine revision 58a1894a1c
+    • Dart version 2.1.0-dev.3.1.flutter-760a9690c2
+
+[✓] Android toolchain - develop for Android devices (Android SDK 28.0.3)
+    • Android SDK at /Users/thanhnguyen/Library/Android/sdk
+    • Android NDK location not configured (optional; useful for native profiling support)
+    • Platform android-28, build-tools 28.0.3
+    • ANDROID_HOME = /Users/thanhnguyen/Library/Android/sdk
+    • Java binary at: /Applications/Android Studio.app/Contents/jre/jdk/Contents/Home/bin/java
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1136-b06)
+    • All Android licenses accepted.
+
+[✓] iOS toolchain - develop for iOS devices (Xcode 10.0)
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Xcode 10.0, Build version 10A255
+    • ios-deploy 2.0.0
+    • CocoaPods version 1.5.3
+
+[✓] Android Studio (version 3.2)
+    • Android Studio at /Applications/Android Studio.app/Contents
+    • Flutter plugin version 29.1.1
+    • Dart plugin version 181.5616
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1136-b06)
+
+[!] VS Code (version 1.27.2)
+    • VS Code at /Applications/Visual Studio Code.app/Contents
+    • Flutter extension not installed; install from
+      https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter
+
+[✓] Connected devices (1 available)
+    • Nexus 5X • 007fde564c34a56e • android-arm64 • Android 7.1.2 (API 25)
+
+! Doctor found issues in 1 category.
+```

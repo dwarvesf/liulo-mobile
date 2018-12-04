@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:liulo/model/question.dart';
 import 'package:liulo/model/response/create_event_response.dart';
 import 'package:liulo/model/response/create_topic_response.dart';
 import 'package:liulo/model/response/list_event_response.dart';
@@ -10,7 +11,7 @@ import 'package:liulo/utils/network_util.dart';
 
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
-  static final BASE_URL = "http://192.168.40.156:4000/api/v1";
+  static final BASE_URL = "https://liulo.dwarvesf.com/api/v1";
   static final LOGIN_URL = BASE_URL + "/login_google";
   static final LIST_EVENT = BASE_URL + "/event";
   static final TOPIC = BASE_URL + "/topic";
@@ -80,6 +81,22 @@ class RestDatasource {
     });
   }
 
+  Future<List<Question>> getListQuestion(String token, int id) {
+    var link = '${TOPIC}/${id}/question';
+    return _netUtil
+        .get(link, headersGet: getHeaders(token))
+        .then((dynamic res) {
+      /* if (res["error"] != null && res["error"])
+        throw new Exception(res["error_msg"]);*/
+
+      var listQuestion = new List<Question>();
+
+      for (var value in res) {
+        listQuestion.add(Question.fromJson(value));
+      }
+      return listQuestion;
+    });
+  }
   Map<String, String> getHeaders(String token) {
     var authorization = 'Bearer ${token}';
     Map<String, String> headers = new HashMap();

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:liulo/model/event.dart';
 import 'package:liulo/model/topic.dart';
@@ -47,8 +48,14 @@ class _ListTopicScreenState extends State<ListTopicScreen>
     refreshKey.currentState?.show(atTop: false);
 
     var token = await TokenUtil.getToken();
+
     if (token.isNotEmpty) {
-      listTopicPresenter.getListTopic(token, widget.event.id);
+      var connectivityResult = await (new Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        ViewUtil.showDialogConnection(context);
+      } else {
+        listTopicPresenter.getListTopic(token, widget.event.id);
+      }
     }
 
     return null;
@@ -60,16 +67,17 @@ class _ListTopicScreenState extends State<ListTopicScreen>
     });
   }
 
-  void replaceToListQuestionScreen() {
+  void replaceToListQuestionScreen(Topic topic) {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ListQuestionScreen(title: 'Manage Question')),
+          builder: (context) =>
+              ListQuestionScreen(title: 'Manage Question', topic: topic)),
     );
   }
 
   void _onTapItem(BuildContext context, Topic topic) {
-    replaceToListQuestionScreen();
+    replaceToListQuestionScreen(topic);
   }
 
   Column _buildItem(int position) {

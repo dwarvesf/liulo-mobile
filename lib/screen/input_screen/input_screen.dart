@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:liulo/application.dart';
@@ -10,6 +11,7 @@ import 'package:liulo/screen/input_screen/input_presenter.dart';
 import 'package:liulo/screen/user/user_home_screen.dart';
 import 'package:liulo/utils/signin_util.dart';
 import 'package:liulo/utils/token_util.dart';
+import 'package:liulo/utils/view_util.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -77,6 +79,7 @@ class _InputScreenState extends State<InputScreen>
     } else {
       visibilityView = true;
     }
+
     SignInUtil.googleSignIn.onCurrentUserChanged
         .listen((GoogleSignInAccount account) {
       setState(() {
@@ -122,10 +125,13 @@ class _InputScreenState extends State<InputScreen>
   Future<Null> _getToken() async {
     final GoogleSignInAuthentication auth = await _currentUser.authentication;
     if (auth != null) {
-      print(auth);
-
-      setState(() => _isLoading = true);
-      _presenter.doLogin(auth.accessToken, "google");
+      var connectivityResult = await (new Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        ViewUtil.showDialogConnection(context);
+      } else {
+        setState(() => _isLoading = true);
+        _presenter.doLogin(auth.accessToken, "google");
+      }
     } else {
       _changed(true);
     }
