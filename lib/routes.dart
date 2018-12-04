@@ -11,6 +11,8 @@ class Routes {
 
   static String videoPlayer = "/video-player";
 
+  static String test = "/test";
+
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       print("ROUTE WAS NOT FOUND !!!");
@@ -23,5 +25,7 @@ class Routes {
     router.define(map, handler: mapHandler);
 
     router.define(videoPlayer, handler: videoPlayerHandler);
+
+    router.define(test, handler: testHandler);
   }
 }

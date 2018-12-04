@@ -130,7 +130,7 @@ DEPENDENCIES:
   - Flutter (from `/Volumes/Data/Software/flutter/bin/cache/artifacts/engine/ios`)
   - geolocator (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-2.1.0/ios`)
   - google_api_availability (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_api_availability-1.0.4/ios`)
-  - google_maps_flutter (from `/Volumes/Data/Software/flutter/.pub-cache/git/plugins-535124fdd08b4fa7ce9f596f96b76e2061f3744f/packages/google_maps_flutter/ios`)
+  - "google_maps_flutter (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.0.3+3/ios`)"
   - google_sign_in (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.2.4/ios`)
   - GoogleSignIn
   - image_picker (from `/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.4.10/ios`)
@@ -173,7 +173,7 @@ EXTERNAL SOURCES:
   google_api_availability:
     :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_api_availability-1.0.4/ios"
   google_maps_flutter:
-    :path: "/Volumes/Data/Software/flutter/.pub-cache/git/plugins-535124fdd08b4fa7ce9f596f96b76e2061f3744f/packages/google_maps_flutter/ios"
+    :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.0.3+3/ios"
   google_sign_in:
     :path: "/Volumes/Data/Software/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.2.4/ios"
   image_picker:

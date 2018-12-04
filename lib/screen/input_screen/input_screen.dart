@@ -161,6 +161,10 @@ class _InputScreenState extends State<InputScreen>
     Application.router.navigateTo(context, Routes.map);
   }
 
+  void goToTestScreen() {
+    Application.router.navigateTo(context, Routes.test);
+  }
+
   void goToVideoPlayerScreen() {
     Application.router.navigateTo(context, Routes.videoPlayer);
   }
@@ -259,6 +263,20 @@ class _InputScreenState extends State<InputScreen>
               padding: const EdgeInsets.all(8.0),
               child: new Text(
                 "Video Player",
+              ),
+            ),
+          ),
+
+           new ButtonTheme(
+            minWidth: 150.0,
+            height: 36.0,
+            child: RaisedButton(
+              onPressed: goToTestScreen,
+              textColor: Colors.white,
+              color: Colors.red,
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                "Test View",
               ),
             ),
           ),

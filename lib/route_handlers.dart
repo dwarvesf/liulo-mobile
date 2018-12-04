@@ -9,6 +9,7 @@ import 'package:liulo/reducers/index.dart';
 import 'package:liulo/screen/input_screen/input_screen.dart';
 import 'package:liulo/views/app_loading/index.dart';
 import 'package:liulo/views/map/index.dart';
+import 'package:liulo/views/test/index.dart';
 import 'package:liulo/views/video_player/index.dart';
 import 'views/question_list/index.dart';
 
@@ -53,4 +54,8 @@ var mapHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<St
 
 var videoPlayerHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return VideoPlayerScreen();
+});
+
+var testHandler = Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return TestScreen();
 });

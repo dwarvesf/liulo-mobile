@@ -14,7 +14,7 @@ import GoogleMaps
     
     Fabric.with([Crashlytics.self])
     
-    GMSServices.provideAPIKey("AIzaSyDqu4UryKCeAy19CVaDIXI8LiD2thX1M0U")
+    GMSServices.provideAPIKey("AIzaSyBx7_OdvgvFR7_9mPz-XKo1bWNiOp5v0Q4")
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
